@@ -1,0 +1,386 @@
+﻿Write a C program to identify delimiters in an input file.
+
+
+#include <stdio.h>
+
+
+int main() {
+    FILE *input_file;
+    char buffer[1000];
+    char delimiter[] = ", ";
+
+
+    input_file = fopen("input.txt", "r");
+    if (input_file == NULL) {
+        printf("Unable to open input file.\n");
+        return 1;
+    }
+
+
+    fgets(buffer, sizeof(buffer), input_file);
+
+
+    char *token = strtok(buffer, delimiter);
+    while (token != NULL) {
+        printf("Token: %s\n", token);
+        token = strtok(NULL, delimiter);
+    }
+
+
+    fclose(input_file);
+
+
+    return 0;
+}
+
+
+Input.txt -> apple, banana, cherry, date
+
+
+o/p ->
+Token: apple
+Token: banana
+Token: cherry
+Token: date
+
+
+Write a C program to identify space, newline, '\t' in an input file
+
+
+#include <stdio.h>
+
+
+int main() {
+    FILE *input_file;
+    char buffer[1000];
+    char delimiter[] = " \n\t";
+
+
+    input_file = fopen("input.txt", "r");
+    if (input_file == NULL) {
+        printf("Unable to open input file.\n");
+        return 1;
+    }
+
+
+    fgets(buffer, sizeof(buffer), input_file);
+
+
+    char *token = strtok(buffer, delimiter);
+    while (token != NULL) {
+        printf("Token: %s\n", token);
+        token = strtok(NULL, delimiter);
+    }
+
+
+    fclose(input_file);
+
+
+    return 0;
+}
+
+
+Input,txt -> This is a test file.
+It contains spaces, tabs, and
+newlines.
+
+
+o/p ->
+Token: This
+Token: is
+Token: a
+Token: test
+Token: file.
+Token: It
+Token: contains
+Token: spaces,
+Token: tabs,
+Token: and
+Token: newlines.
+
+
+Write a C program to identify operators in an input file.
+
+
+#include <stdio.h>
+#include <string.h>
+
+
+int main() {
+    FILE *input_file;
+    char buffer[1000];
+    char *operator = "+-*/%";
+
+
+    input_file = fopen("input.txt", "r");
+    if (input_file == NULL) {
+        printf("Unable to open input file.\n");
+        return 1;
+    }
+
+
+    fgets(buffer, sizeof(buffer), input_file);
+
+
+    for (int i = 0; i < strlen(buffer); i++) {
+        if (strchr(operator, buffer[i])) {
+            printf("Operator: %c\n", buffer[i]);
+        }
+    }
+
+
+    fclose(input_file);
+
+
+    return 0;
+}
+
+
+Input.txt -> This is a test file with operators: +, -, *, /, and %.
+
+
+o/p ->
+ Operator: +
+Operator: -
+Operator: *
+Operator: /
+Operator: %
+
+
+Write a C program to identify all delimiters [1], operators in an input C program file. (Consider single character processing)
+
+
+#include <stdio.h>
+#include <string.h>
+
+
+int main() {
+    FILE *input_file;
+    char buffer[1000];
+    char *delimiters = " \n\t,;(){}[]";
+    char *operators = "+-*/%<>=&|^!~?:";
+
+
+    input_file = fopen("input.c", "r");
+    if (input_file == NULL) {
+        printf("Unable to open input file.\n");
+        return 1;
+    }
+
+
+    while (fgets(buffer, sizeof(buffer), input_file)) {
+        for (int i = 0; i < strlen(buffer); i++) {
+            if (strchr(delimiters, buffer[i])) {
+                printf("Delimiter: %c\n", buffer[i]);
+            }
+            else if (strchr(operators, buffer[i])) {
+                printf("Operator: %c\n", buffer[i]);
+            }
+        }
+    }
+
+
+    fclose(input_file);
+
+
+    return 0;
+}
+
+
+Input.txt -> make a c file and paste
+#include <stdio.h>
+
+
+int main() {
+    printf("Hello, world!");
+    return 0;
+}
+o/p -> 
+Delimiter: #
+include
+Delimiter: <
+stdio.h
+Delimiter: >
+Delimiter: \n
+Delimiter: \n
+int
+main
+Delimiter: (
+Delimiter: )
+Delimiter: {
+Delimiter: \n
+printf
+Delimiter: (
+"Hello, world!"
+Delimiter: )
+Delimiter: ;
+Delimiter: \n
+return
+0
+Delimiter: ;
+Delimiter: \n
+}
+
+
+write a c program to identify and/ or count the occurences of all two character long operator
+
+
+#include <stdio.h>
+#include <string.h>
+
+
+int main() {
+    FILE *input_file;
+    char buffer[1000];
+    char *operators = "++ -- -> == <= >= != << >> && ||";
+
+
+    input_file = fopen("input.c", "r");
+    if (input_file == NULL) {
+        printf("Unable to open input file.\n");
+        return 1;
+    }
+
+
+    int count[12] = {0}; // An array to store the count of each operator
+    while (fgets(buffer, sizeof(buffer), input_file)) {
+        for (int i = 0; i < strlen(buffer) - 1; i++) {
+            char op[3];
+            op[0] = buffer[i];
+            op[1] = buffer[i+1];
+            op[2] = '\0'; // Null-terminate the string
+
+
+            if (strstr(operators, op)) {
+                // If the current two characters match any operator, increment its count
+                if (strcmp(op, "++") == 0) {
+                    count[0]++;
+                }
+                else if (strcmp(op, "--") == 0) {
+                    count[1]++;
+                }
+                else if (strcmp(op, "->") == 0) {
+                    count[2]++;
+                }
+                else if (strcmp(op, "==") == 0) {
+                    count[3]++;
+                }
+                else if (strcmp(op, "<=") == 0) {
+                    count[4]++;
+                }
+                else if (strcmp(op, ">=") == 0) {
+                    count[5]++;
+                }
+                else if (strcmp(op, "!=") == 0) {
+                    count[6]++;
+                }
+                else if (strcmp(op, "<<") == 0) {
+                    count[7]++;
+                }
+                else if (strcmp(op, ">>") == 0) {
+                    count[8]++;
+                }
+                else if (strcmp(op, "&&") == 0) {
+                    count[9]++;
+                }
+                else if (strcmp(op, "||") == 0) {
+                    count[10]++;
+                }
+            }
+        }
+    }
+
+
+    fclose(input_file);
+
+
+    // Print the count of each operator
+    printf("Operators:\n");
+    printf("++: %d\n", count[0]);
+    printf("--: %d\n", count[1]);
+    printf("->: %d\n", count[2]);
+    printf("==: %d\n", count[3]);
+    printf("<=: %d\n", count[4]);
+    printf(">=: %d\n", count[5]);
+    printf("!=: %d\n", count[6]);
+    printf("<<: %d\n", count[7]);
+    printf(">>: %d\n", count[8]);
+    printf("&&: %d\n", count[9]);
+    printf("||: %d\n", count[10]);
+
+
+    return 0;
+}
+
+
+input
+.c file 
+#include <stdio.h>
+
+
+int main() {
+    int a = 5, b = 10;
+    if (a == b) {
+        printf("a is equal to b\n");
+    }
+    else {
+        printf("a is not equal to b\n");
+    }
+    return 0;
+}
+
+
+o/p -> 
+Operators:
+++: 0
+--: 0
+->: 0
+==: 2
+<=: 0
+>=: 0
+!=: 0
+<<: 0
+>>: 0
+&&: 0
+||: 0
+
+
+write a program using lex to identify valid or invalid number in input
+
+
+%{
+#include <stdio.h>
+%}
+
+
+%%
+[0-9]+(\.[0-9]+)?   { printf("%s is a valid number\n", yytext); }
+[0-9]*\.[0-9]+      { printf("%s is a valid number\n", yytext); }
+[0-9]+[eE][+-]?[0-9]+   { printf("%s is a valid number\n", yytext); }
+.|\n               { printf("%s is not a valid number\n", yytext); }
+%%
+
+
+int main() {
+    yylex();
+    return 0;
+}
+
+
+Input 
+lex number.l
+cc lex.yy.c -o number -ll
+echo "123.456\n789\n1.23e4\nhello\n" | ./number
+
+
+Output: 
+
+
+123.456 is a valid number
+789 is a valid number
+1.23e4 is a valid number
+h is not a valid number
+e is not a valid number
+l is not a valid number
+l is not a valid number
+o is not a valid number
